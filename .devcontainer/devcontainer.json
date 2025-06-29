@@ -24,5 +24,10 @@
 				"mutantdino.resourcemonitor"
 			]
 		}
-	}
+	},
+	"containerEnv": {
+		"REPO_MGMT_API_ISSUER": "https://cognito-idp.us-east-2.amazonaws.com/us-east-2_AE7uogN5r",
+		"REPO_MGMT_API_CLIENT_IDS": "m95vusubvir6psn1mfac61ond"
+	},
+	"postCreateCommand": "sudo chown vscode:vscode /srv"
 }
