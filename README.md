@@ -1,54 +1,66 @@
-# UV Devcontainer Template
+# Repository Management API
 
-This template is designed to streamline the setup of a Python development environment using the `uv` package manager on Debian Bookworm. It's equipped with a collection of tools and extensions specifically chosen to enhance the Python development workflow, from code writing to testing and deployment.
+A FastAPI-based service for managing user-specific Git repositories. This API allows authenticated users to create and manage bare Git repositories on the server, supporting automation and integration with developer workflows.
 
-## Features Overview
+## Features
 
-| Feature                 | Description                                                                                           |
-|-------------------------|-------------------------------------------------------------------------------------------------------|
-| **Operating System**    | Debian Bookworm, providing a stable foundation for development.                                       |
-| **Package Management**  | `uv`, a lightweight and efficient package and environment manager.                                    |
-| **Programming Language**| Python, ready for development right out of the box.                                                  |
-| **Version Control**     | Git integrated for robust version control.                                                           |
-| **VSCode Extensions**   | A curated list of VSCode extensions installed, including essentials for Python development.           |
-| **Testing Framework**   | Pytest configured to run tests from the `tests` directory, utilizing VSCode's test runner for ease of testing. |
+- **User Authentication**: Secure endpoints with authentication (see `auth.py`).
+- **Repository Creation**: Create bare Git repositories per user via API.
+- **Filesystem Isolation**: Each user's repositories are stored in their own directory.
+- **Extensible**: Designed for easy addition of more repository management features.
+
+## API Endpoints
+
+### Create Repository
+
+```
+POST /repos/{repo_name}
+```
+
+- **Description**: Creates a new bare Git repository for the authenticated user.
+- **Path Parameter**: `repo_name` – Name of the repository to create.
+- **Authentication**: Required (see below).
+- **Response**: `{ "message": "Repository created", "repo": "<repo_name>", "user": "<username>" }`
+
+## Authentication
+
+This API uses a custom authentication system. See `repository_management_api/auth.py` for details. You must provide valid credentials to access protected endpoints.
 
 ## Getting Started
 
-1. **Clone and Open**: Clone this repository and open it in VSCode. The project will prompt to reopen in a devcontainer.
-1. **Dev Environment Initialization**: The `uv sync` task can be run manually, preparing and updating your development environment.
-1. **Rename the Project Directory**: Rename the `/project` directory to match the name of your new project to get started. Update the project name in the pyproject.toml file as well.
+### Prerequisites
+- Python 3.10+
+- Git installed on the server
 
-## Managing Dependencies
+### Installation
 
-- **Application Dependencies**: Defined in `pyproject.toml`. A frozen set of these dependencies is created and stored in `uv.lock` for reproducible deployments.
+1. Clone the repository:
+   ```sh
+   git clone https://github.com/your-org/repository-management-api.git
+   cd repository-management-api
+   ```
+2. Install dependencies:
+   ```sh
+   uv sync
+   ```
+3. Run the application:
+   ```sh
+   uvicorn repository_management_api.main:app --reload
+   ```
 
-## Running Tests
+### Directory Structure
+- User repositories are stored under `/srv/git/<username>/<repo_name>.git`.
 
-Tests are run using VSCode's integrated test runner:
+## Development
 
-1. Navigate to the testing sidebar in VSCode.
-1. You'll see your tests listed there. Test can be run directly from the UI.
-
-## Running the Application
-
-VSCode's `launch.json` is configured to debug the currently open Python file, allowing you to run and debug any part of your project easily.
-
-> Note: You may need to tweak `launch.json` for specific project requirements, such as adding arguments or setting environment variables.
-
-### Quick Start
-
-- Open `project/main.py` or any Python file you intend to run.
-- Use `F5` or the green play button in the "Run and Debug" sidebar to start debugging.
-
-## Deployment
-
-Deploy your application using the dependencies detailed in `uv.lock` to guarantee that your deployment mirrors the tested state of your application.
+- Tests are located in the `tests/` directory.
+- Use VSCode's test runner or run `pytest` manually.
+- Lint and format code before submitting changes.
 
 ## Contributing
 
-We welcome contributions to improve the `uv-devcontainer-template`. Please follow the standard fork and pull request workflow. Make sure to add tests for new features and update the documentation as necessary.
+Contributions are welcome! Please open issues or submit pull requests. Ensure your code is tested and documented.
 
 ## License
 
-This project is licensed under the [MIT License](LICENSE.md).
+This project is licensed under the MIT License.
